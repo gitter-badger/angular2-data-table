@@ -48,7 +48,7 @@
     "concurrent": "^0.3.2",
     "jspm": "^0.17.0-beta.17",
     "lite-server": "^2.2.0",
-    "node-sass": "^3.7.0",
+    "node-sass": "^3.8.0",
     "rimraf": "^2.5.2",
     "typescript": ">=1.9.0-dev.20160608-1.0",
     "uglify-js": "^2.6.2"

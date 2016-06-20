@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef } from '@angular/core';
+import { Component, Input, ElementRef, ViewContainerRef } from '@angular/core';
 import { TableColumn } from '../../models/TableColumn';
 import { deepValueGetter } from '../../utils/deepGetter';
 
@@ -25,8 +25,15 @@ export class DataTableBodyCell {
     return deepValueGetter(this.row, this.column.prop);
   }
 
-  constructor(elm: ElementRef){
+  constructor(elm: ElementRef, public viewContainerRef:ViewContainerRef){
     elm.nativeElement.classList.add('datatable-body-cell');
+  }
+
+  ngOnInit() {
+    console.log('col', this.column)
+
+    this.viewContainerRef.insert(this.column.ref, 0)
+    debugger;
   }
 
 }

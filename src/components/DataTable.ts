@@ -5,7 +5,9 @@ import {
   ElementRef,
   EventEmitter,
   HostListener,
-  KeyValueDiffers
+  KeyValueDiffers,
+  ViewChildren,
+  ContentChildren
 } from '@angular/core';
 
 import { StateService } from '../services/State';
@@ -13,7 +15,9 @@ import { Visibility } from '../directives/Visibility';
 import { forceFillColumnWidths, adjustColumnWidths } from '../utils/math';
 import { ColumnMode } from '../models/ColumnMode';
 import { TableOptions } from '../models/TableOptions';
+import { TableColumn } from '../models/TableColumn';
 
+import { DataTableColumn } from './DataTableColumn';
 import { DataTableHeader } from './header/Header';
 import { DataTableBody } from './body/Body';
 import { DataTableFooter } from './footer/Footer';
@@ -40,7 +44,8 @@ import { DataTableFooter } from './footer/Footer';
     DataTableHeader,
     DataTableBody,
     DataTableFooter,
-    Visibility
+    Visibility,
+    DataTableColumn
   ],
   host: {
     '[class.fixed-header]': 'options.headerHeight !== "auto"',
@@ -67,6 +72,8 @@ export class DataTable {
   private element: HTMLElement;
   private differ: any;
 
+  @ContentChildren(DataTableColumn) columns;
+
   constructor(element: ElementRef, private state: StateService, differs: KeyValueDiffers) {
     this.element = element.nativeElement;
     this.element.classList.add('datatable');
@@ -84,6 +91,16 @@ export class DataTable {
 
   ngAfterViewInit() {
     this.adjustColumns();
+    console.log('chil', this.columns.toArray())
+
+    this.options.columns = [];
+
+    for(let col of this.columns.toArray()) {
+      this.options.columns.push(new TableColumn({
+        name: col.name,
+        ref: col
+      });
+    }
   }
 
   ngDoCheck() {
@@ -110,6 +127,8 @@ export class DataTable {
   resize() { this.adjustSizes(); }
 
   adjustColumns(forceIdx: any) {
+    if((!this.options.columns || !this.options.columns.length) return;
+
     let width = this.state.innerWidth;
     if(this.options.scrollbarV) {
       width =- this.state.scrollbarWidth;

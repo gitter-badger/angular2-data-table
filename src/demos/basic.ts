@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import {
-  DataTable,
+  DATATABLE_COMPONENTS,
   TableOptions,
   TableColumn,
   ColumnMode
@@ -16,10 +16,13 @@ import {
         class="material"
     		[rows]="rows"
     		[options]="options">
+        <datatable-column name="Gender">
+          Meow {{$value}}
+        </datatable-column>
     	</datatable>
     </div>
   `,
-  directives: [ DataTable ]
+  directives: [ DATATABLE_COMPONENTS ]
 })
 export class App {
 
@@ -29,12 +32,7 @@ export class App {
     columnMode: ColumnMode.force,
     headerHeight: 50,
     footerHeight: 50,
-    rowHeight: 'auto',
-    columns: [
-      new TableColumn({ name: "Name" }),
-      new TableColumn({ name: "Gender" }),
-      new TableColumn({ name: "Company" })
-    ]
+    rowHeight: 'auto'
   });
 
   constructor() {
